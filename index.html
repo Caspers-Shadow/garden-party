@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garden Party · A Living Herbarium</title>
+  <meta name="description" content="Plant an illustrated botanical garden, arrange your favourite flowers, and save your own botanical print.">
+  <meta name="theme-color" content="#f3ebd9">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="garden.css">
+</head>
+<body data-theme="royal">
+
+  <!-- Top Victorian Gilded Scrollwork Border -->
+  <div class="gilded-border border-top" id="topGildedBorder"></div>
+
+  <!-- World Scenery -->
+  <div class="world-container">
+    
+    <!-- 1. The Sky (Protected Non-Planting Realm) -->
+    <div class="sky-zone" id="skyZone">
+      <canvas id="stars-canvas"></canvas>
+
+      <!-- Celestial Orb (Sun in Day/Sunset, Moon in Night) -->
+      <svg class="celestial-orb" id="celestialOrb" viewBox="0 0 100 100">
+        <circle id="orbCore" cx="50" cy="50" r="22" fill="var(--sun-moon-core)" stroke="var(--sun-moon-ray)" stroke-width="1.8"/>
+        <!-- Radiant Victorian Rays -->
+        <g id="orbRays" stroke="var(--sun-moon-ray)" stroke-width="1.5" stroke-linecap="round">
+          <line x1="50" y1="12" x2="50" y2="24"/>
+          <line x1="50" y1="88" x2="50" y2="76"/>
+          <line x1="12" y1="50" x2="24" y2="50"/>
+          <line x1="88" y1="50" x2="76" y2="50"/>
+          <line x1="23" y1="23" x2="32" y2="32"/>
+          <line x1="77" y1="77" x2="68" y2="68"/>
+          <line x1="23" y1="77" x2="32" y2="68"/>
+          <line x1="77" y1="23" x2="68" y2="32"/>
+          <!-- Wavy secondary rays -->
+          <path d="M50,24 Q53,18 50,14" fill="none"/>
+          <path d="M50,76 Q47,82 50,86" fill="none"/>
+          <path d="M24,50 Q18,47 14,50" fill="none"/>
+          <path d="M76,50 Q82,53 86,50" fill="none"/>
+        </g>
+        <!-- Lunar craters / sun detail -->
+        <circle cx="50" cy="50" r="18" fill="none" stroke="var(--sun-moon-ray)" stroke-width="0.8" stroke-dasharray="2,2"/>
+      </svg>
+
+      <!-- Vintage clouds -->
+      <svg class="vintage-cloud cloud-a" viewBox="0 0 200 60">
+        <path d="M10,45 Q25,25 50,30 Q70,10 110,15 Q145,5 170,25 Q195,35 185,45 Z" fill="#ffffff" stroke="var(--gold-foil)" stroke-width="1.2" stroke-dasharray="4,2"/>
+      </svg>
+      <svg class="vintage-cloud cloud-b" viewBox="0 0 240 70">
+        <path d="M15,50 Q30,28 65,32 Q90,12 140,18 Q180,8 210,30 Q235,42 225,50 Z" fill="#ffffff" stroke="var(--gold-foil)" stroke-width="1.2" stroke-dasharray="4,2"/>
+      </svg>
+    </div>
+
+    <!-- Atmospheric Horizon Mist -->
+    <div class="horizon-mist"></div>
+
+    <!-- Classical Stone Balustrade & Distant Cypress Hedge Divider -->
+    <div class="horizon-barrier" id="horizonBarrier">
+      <svg class="horizon-svg" viewBox="0 0 1200 52" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="cypressGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--horizon-cypress-1)"/>
+            <stop offset="100%" stop-color="var(--horizon-cypress-2)"/>
+          </linearGradient>
+          <linearGradient id="stoneRailGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--stone-rail-top)"/>
+            <stop offset="100%" stop-color="var(--stone-rail-bottom)"/>
+          </linearGradient>
+        </defs>
+
+        <g fill="url(#cypressGrad)">
+          <path d="M0,34 Q15,4 30,34 M45,32 Q55,8 65,32 M90,34 Q105,2 120,34 M150,32 Q162,12 175,32 M210,34 Q225,5 240,34 M280,32 Q290,10 300,32 M340,34 Q355,2 370,34 M420,34 Q435,6 450,34 M510,34 Q525,4 540,34 M600,34 Q615,8 630,34 M690,34 Q705,3 720,34 M780,32 Q795,10 810,32 M870,34 Q885,5 900,34 M960,34 Q975,4 990,34 M1050,34 Q1065,2 1080,34 M1140,32 Q1155,9 1170,32 L1200,36 L0,36 Z"/>
+        </g>
+
+        <rect x="0" y="34" width="1200" height="4" fill="url(#stoneRailGrad)" stroke="var(--gold-dark)" stroke-width="0.8"/>
+        <rect x="0" y="38" width="1200" height="9" fill="var(--stone-rail-bottom)"/>
+        <line x1="0" y1="38" x2="1200" y2="38" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        <line x1="0" y1="47" x2="1200" y2="47" stroke="rgba(0,0,0,0.4)" stroke-width="1.2"/>
+      </svg>
+    </div>
+
+    <!-- 2. The Garden Soil Lawn (Perspective Planting Zone) -->
+    <div class="lawn-zone" id="lawnZone"></div>
+  </div>
+
+  <!-- Interactive Pointer Surface -->
+  <div id="interaction-surface" tabindex="0" role="region" aria-label="Garden planting area" aria-describedby="gardenHelp"><div id="keyboardCursor" aria-hidden="true"></div></div>
+
+  <!-- Dynamic Living Botanical Garden -->
+  <div id="garden-bed" aria-label="Your planted specimens"></div>
+
+  <!-- Melodic Feedback Toast -->
+  <div class="melody-indicator" id="melodyIndicator" aria-hidden="true">
+    <svg class="mini-icon" viewBox="0 0 16 16">
+      <path d="M6,13 A2.5,2 0 1,1 3.5,11 A2.5,2 0 0,1 6,13 Z M6,11 L6,2 L13,4 L13,6 L8,4.5 L8,11.5 Z" fill="currentColor"/>
+    </svg>
+    <span id="melodyNoteText">Melody: Clair de Lune</span>
+  </div>
+
+  <!-- Sky Boundary Guidance Note -->
+  <div class="sky-guidance" id="skyGuidance">
+    <svg class="mini-icon" viewBox="0 0 16 16">
+      <path d="M8,15 L8,6 M8,6 C8,2.5 13,2.5 13,6 C10,6 8,6 8,6 Z M8,9 C8,5.5 3,5.5 3,9 C6,9 8,9 8,9 Z"/>
+    </svg>
+    <span id="gardenHelp">Choose a seed, then click or brush across the meadow.</span>
+  </div>
+
+  <!-- Classical Editorial "GARDEN PARTY" Title Plaque -->
+  <header class="header-plaque">
+    <div class="title-banner-wrap">
+      <h1 class="title-banner">
+        <!-- Left botanical branch flourish -->
+        <svg class="title-flourish-svg" viewBox="0 0 32 24">
+          <path d="M30,12 C20,12 12,20 2,12 C10,6 20,8 30,12 Z M16,10 C14,5 8,4 4,8 M22,11 C24,4 18,2 14,6"/>
+        </svg>
+        Garden Party
+        <!-- Right botanical branch flourish -->
+        <svg class="title-flourish-svg" viewBox="0 0 32 24" style="transform: scaleX(-1);">
+          <path d="M30,12 C20,12 12,20 2,12 C10,6 20,8 30,12 Z M16,10 C14,5 8,4 4,8 M22,11 C24,4 18,2 14,6"/>
+        </svg>
+      </h1>
+    </div>
+    <div class="subtitle-script">A little garden, grown by you.</div>
+  </header>
+
+  <!-- Bottom Victorian Gilded Scrollwork Border -->
+  <div class="gilded-border border-bottom" id="bottomGildedBorder"></div>
+
+  <div class="garden-status" aria-live="polite"><span id="specimenCount">0</span> specimens <span aria-hidden="true">·</span> <span id="saveStatus">Your quiet corner</span></div>
+  <nav class="garden-dock" aria-label="Garden tools">
+    <button id="catalogueOpen" class="seed-picker" aria-haspopup="dialog"><span id="selectedSeedPreview" aria-hidden="true"></span><span><small>Plant a little wonder</small><strong id="selectedSeedName">Botanical mix</strong></span><span aria-hidden="true">⌄</span></button>
+    <div class="dock-divider" aria-hidden="true"></div>
+    <button id="plantTool" class="tool-button active" aria-pressed="true" title="Plant flowers (P)"><span aria-hidden="true">❧</span><span>Plant</span></button>
+    <button id="editTool" class="tool-button" aria-pressed="false" title="Arrange flowers (E)"><span aria-hidden="true">✥</span><span>Arrange</span></button>
+    <button id="undoButton" class="tool-button" disabled title="Undo (Ctrl or Command + Z)"><span aria-hidden="true">↶</span><span>Undo</span></button>
+    <button id="printOpen" class="tool-button" aria-haspopup="dialog"><span aria-hidden="true">▧</span><span>Save print</span></button>
+    <button id="folioOpen" class="tool-button" aria-haspopup="dialog"><span aria-hidden="true">☷</span><span>Folio</span></button>
+  </nav>
+  <aside id="selectionTools" class="selection-tools" aria-label="Selected specimen" hidden>
+    <strong id="selectionName">Selected flower</strong>
+    <label>Size <input id="plantSize" type="range" min="0.65" max="1.5" step="0.05" value="1"></label>
+    <label>Tilt <input id="plantTilt" type="range" min="-35" max="35" step="1" value="0"></label>
+    <button id="removePlant" class="quiet-button">Remove</button><button id="selectionDone" class="quiet-button">Done</button>
+  </aside>
+
+  <dialog id="catalogueDialog" class="botanical-dialog catalogue-dialog" aria-labelledby="catalogueTitle">
+    <div class="dialog-heading"><div><p class="eyebrow">The Botanical Compendium</p><h2 id="catalogueTitle">A catalogue of little wonders</h2></div><button class="close-dialog" data-close="catalogueDialog" aria-label="Close seed catalogue">×</button></div>
+    <p class="dialog-intro">Choose a specimen to grow in your own corner of the world.</p>
+    <label class="search-label" for="seedSearch">Find a flower</label><input type="search" id="seedSearch" placeholder="Rose, morning glory, chamomile…" autocomplete="off">
+    <div id="seedCards" class="seed-grid"></div><p id="noSeeds" hidden>No specimens match that name.</p>
+  </dialog>
+
+  <dialog id="folioDialog" class="botanical-dialog folio-dialog" aria-labelledby="folioTitle">
+    <div class="dialog-heading"><div><p class="eyebrow">Notes from the meadow</p><h2 id="folioTitle">Your botanical folio</h2></div><button class="close-dialog" data-close="folioDialog" aria-label="Close botanical folio">×</button></div>
+    <div class="settings-grid">
+      <label>Garden name<input id="gardenName" maxlength="70" placeholder="My Botanical Garden" autocomplete="off"></label>
+      <label>Garden realm<select id="themeSelect"><option value="royal">Royal Garden · Day</option><option value="night">Moonlit Sanctuary</option><option value="sunset">Sunset Serenade</option><option value="pastel">Pastel Rococo</option><option value="herbarium">Antique Herbarium</option></select></label>
+      <label>Planting mode<select id="lifeSelect"><option value="permanent">Permanent · stay and grow</option><option value="living">Living · gently fade after a minute</option></select></label>
+      <label>Musical score<select id="melodySelect"><option value="clair">Clair de Lune · Debussy</option><option value="ghibli">Meadow Breeze · Summer Waltz</option><option value="gymnopedie">Gymnopédie No. 1 · Satie</option><option value="canon">Music Box · Canon in D</option><option value="harp">Romantic Folk Harp</option><option value="mute">Silence</option></select></label>
+    </div>
+    <label class="check-row"><input type="checkbox" id="soundEnabled"> Play a soft note as I plant</label>
+    <label class="check-row"><input type="checkbox" id="motionEnabled"> Gentle motion and garden visitors</label>
+    <p class="folio-note">Your garden is saved in this browser on this device. Clearing browser data removes that saved garden.</p>
+    <details class="garden-help"><summary>A few notes on tending your garden</summary><p>Click or drag on the meadow to plant. Choose Arrange, then drag a flower to move it. Use the size and tilt controls to shape your arrangement.</p><p>Keyboard: focus the meadow and use the arrow keys to move the planting marker; Space or Enter plants a flower. P selects Plant, E selects Arrange. In Arrange, Tab reaches each specimen; Enter selects it, arrow keys move it, and Delete removes it. Ctrl/Command + Z undoes your last change.</p></details>
+    <button id="harvestButton" class="quiet-button harvest-button">Gather all specimens</button>
+  </dialog>
+
+  <dialog id="printDialog" class="botanical-dialog print-dialog" aria-labelledby="printTitle">
+    <div class="dialog-heading"><div><p class="eyebrow">A keepsake from the garden</p><h2 id="printTitle">Your botanical print</h2></div><button class="close-dialog" data-close="printDialog" aria-label="Close print settings">×</button></div>
+    <label>Print title<input id="printName" maxlength="70" placeholder="My Botanical Garden"></label>
+    <label>Paper & atmosphere<select id="printStyle"><option value="paper">Cream botanical paper</option><option value="scene">Garden colours</option></select></label>
+    <label class="check-row"><input type="checkbox" id="printBorder" checked> Include a decorative border</label>
+    <p class="folio-note">Save a high resolution PNG of your arrangement, without the garden controls.</p>
+    <button id="downloadPrint" class="primary-button">Save botanical print</button>
+  </dialog>
+  <div id="gardenToast" role="status" aria-live="polite"></div>
+  <script src="botanicals.js" defer></script><script src="visitors.js" defer></script><script src="sound.js" defer></script><script src="garden.js" defer></script>
+</body>
+</html>

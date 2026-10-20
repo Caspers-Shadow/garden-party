@@ -1,0 +1,844 @@
+
+    :root {
+      /* Theme: Royal Day (Default) */
+      --sky-top: #f3ebd9;
+      --sky-mid: #faf1e3;
+      --sky-bottom: #fff8ee;
+      --sun-moon-core: #f8e7b9;
+      --sun-moon-glow: rgba(248, 231, 185, 0.6);
+      --sun-moon-ray: #c99e42;
+      --horizon-cypress-1: #3b5329;
+      --horizon-cypress-2: #243519;
+      --stone-rail-top: #dfd7c5;
+      --stone-rail-bottom: #9d927b;
+      --lawn-top: #8fb870;
+      --lawn-mid: #5d8a43;
+      --lawn-bottom: #365424;
+      --lawn-shadow: rgba(25, 38, 14, 0.45);
+      --gold-foil: #c99e42;
+      --gold-dark: #8c6721;
+      --gold-light: #fbe39d;
+      --ink-black: #1f1a16;
+      --ink-sepia: #4a3d31;
+      --card-bg: rgba(249, 245, 236, 0.96);
+      --card-border: #c99e42;
+      --card-shadow: 0 16px 45px rgba(40, 30, 20, 0.35);
+      --card-inset: rgba(201, 158, 66, 0.22);
+      --input-bg: rgba(255, 252, 246, 0.9);
+      --paper-vignette: rgba(85, 65, 45, 0.18);
+      --star-display: none;
+    }
+
+    /* Theme: Moonlit Night Garden */
+    [data-theme="night"] {
+      --sky-top: #0a1022;
+      --sky-mid: #141c38;
+      --sky-bottom: #222b4e;
+      --sun-moon-core: #eef3ff;
+      --sun-moon-glow: rgba(195, 215, 255, 0.85);
+      --sun-moon-ray: #9fb7e8;
+      --horizon-cypress-1: #131a29;
+      --horizon-cypress-2: #090e18;
+      --stone-rail-top: #36415d;
+      --stone-rail-bottom: #1c2336;
+      --lawn-top: #233a47;
+      --lawn-mid: #142530;
+      --lawn-bottom: #0a151d;
+      --lawn-shadow: rgba(0, 0, 0, 0.7);
+      --gold-foil: #9bb7e6;
+      --gold-dark: #5879ad;
+      --gold-light: #e0ecff;
+      --ink-black: #f0f4ff;
+      --ink-sepia: #bccbe8;
+      --card-bg: rgba(16, 22, 42, 0.96);
+      --card-border: #6d8ac0;
+      --card-shadow: 0 16px 45px rgba(0, 0, 0, 0.65);
+      --card-inset: rgba(140, 180, 255, 0.18);
+      --input-bg: rgba(24, 33, 60, 0.9);
+      --paper-vignette: rgba(0, 0, 0, 0.5);
+      --star-display: block;
+    }
+
+    /* Theme: Sunset Serenade */
+    [data-theme="sunset"] {
+      --sky-top: #4a2d52;
+      --sky-mid: #bf5366;
+      --sky-bottom: #fca364;
+      --sun-moon-core: #ffeed8;
+      --sun-moon-glow: rgba(255, 120, 70, 0.85);
+      --sun-moon-ray: #fca364;
+      --horizon-cypress-1: #38243b;
+      --horizon-cypress-2: #211424;
+      --stone-rail-top: #8a6976;
+      --stone-rail-bottom: #4a343e;
+      --lawn-top: #5c6340;
+      --lawn-mid: #3e4429;
+      --lawn-bottom: #222615;
+      --lawn-shadow: rgba(25, 12, 20, 0.6);
+      --gold-foil: #fca364;
+      --gold-dark: #bd5932;
+      --gold-light: #ffdeb8;
+      --ink-black: #fff3ea;
+      --ink-sepia: #f4cbb7;
+      --card-bg: rgba(42, 24, 40, 0.96);
+      --card-border: #e67d58;
+      --card-shadow: 0 16px 45px rgba(25, 10, 25, 0.55);
+      --card-inset: rgba(255, 160, 100, 0.22);
+      --input-bg: rgba(60, 36, 58, 0.9);
+      --paper-vignette: rgba(40, 15, 35, 0.4);
+      --star-display: none;
+    }
+
+    /* Theme: Pastel Rococo Dream */
+    [data-theme="pastel"] {
+      --sky-top: #fae1dd;
+      --sky-mid: #fcd5ce;
+      --sky-bottom: #f8edeb;
+      --sun-moon-core: #fff5eb;
+      --sun-moon-glow: rgba(255, 215, 205, 0.8);
+      --sun-moon-ray: #e09f98;
+      --horizon-cypress-1: #6a9979;
+      --horizon-cypress-2: #4f785c;
+      --stone-rail-top: #e0d6cb;
+      --stone-rail-bottom: #b0a497;
+      --lawn-top: #a7c999;
+      --lawn-mid: #78a368;
+      --lawn-bottom: #4f7340;
+      --lawn-shadow: rgba(60, 80, 50, 0.35);
+      --gold-foil: #d4a373;
+      --gold-dark: #9c6c40;
+      --gold-light: #fefae0;
+      --ink-black: #3f3630;
+      --ink-sepia: #73645a;
+      --card-bg: rgba(255, 250, 245, 0.96);
+      --card-border: #d4a373;
+      --card-shadow: 0 16px 45px rgba(160, 120, 110, 0.25);
+      --card-inset: rgba(212, 163, 115, 0.22);
+      --input-bg: rgba(255, 255, 252, 0.9);
+      --paper-vignette: rgba(140, 100, 90, 0.15);
+      --star-display: none;
+    }
+
+    /* Theme: Antique Dark Herbarium */
+    [data-theme="herbarium"] {
+      --sky-top: #1f231e;
+      --sky-mid: #2c332b;
+      --sky-bottom: #394237;
+      --sun-moon-core: #e6dfc8;
+      --sun-moon-glow: rgba(215, 200, 160, 0.4);
+      --sun-moon-ray: #ab9b76;
+      --horizon-cypress-1: #1a2418;
+      --horizon-cypress-2: #0f160e;
+      --stone-rail-top: #4a5446;
+      --stone-rail-bottom: #2b3328;
+      --lawn-top: #3b4d35;
+      --lawn-mid: #263321;
+      --lawn-bottom: #141c11;
+      --lawn-shadow: rgba(0, 0, 0, 0.65);
+      --gold-foil: #c9ab69;
+      --gold-dark: #826b3a;
+      --gold-light: #ede2c5;
+      --ink-black: #f2eee4;
+      --ink-sepia: #c7beab;
+      --card-bg: rgba(26, 31, 25, 0.97);
+      --card-border: #a38952;
+      --card-shadow: 0 16px 45px rgba(0, 0, 0, 0.65);
+      --card-inset: rgba(200, 170, 100, 0.18);
+      --input-bg: rgba(38, 45, 36, 0.9);
+      --paper-vignette: rgba(0, 0, 0, 0.6);
+      --star-display: none;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ink-black);
+      touch-action: none;
+      transition: color 0.6s ease;
+    }
+
+    /* Antique paper texture & lighting overlay */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.25) 0%, transparent 65%),
+        radial-gradient(ellipse at center, transparent 40%, var(--paper-vignette) 100%),
+        repeating-linear-gradient(45deg, rgba(160, 140, 110, 0.02) 0px, rgba(160, 140, 110, 0.02) 2px, transparent 2px, transparent 6px);
+      pointer-events: none;
+      z-index: 100;
+      transition: background-image 0.8s ease;
+    }
+
+    /* Gilded Scrollwork Borders */
+    .gilded-border {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 48px;
+      pointer-events: none;
+      z-index: 90;
+      background-repeat: repeat-x;
+      background-size: 320px 48px;
+      transition: all 0.6s ease;
+    }
+
+    .border-top {
+      top: 0;
+      border-bottom: 2px solid var(--gold-foil);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .border-bottom {
+      bottom: 0;
+      border-top: 2px solid var(--gold-foil);
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.25);
+      transform: rotate(180deg);
+    }
+
+    /* Scenery Container */
+    .world-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    /* Sky Zone (Protected Non-Planting Realm) */
+    .sky-zone {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 38%;
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 60%, var(--sky-bottom) 100%);
+      z-index: 1;
+      overflow: hidden;
+      transition: background 0.8s ease;
+    }
+
+    /* Night Stars Canvas */
+    #stars-canvas {
+      position: absolute;
+      inset: 0;
+      display: var(--star-display);
+      pointer-events: none;
+    }
+
+    /* Vintage Sun / Moon */
+    .celestial-orb {
+      position: absolute;
+      top: 24px;
+      right: 14%;
+      width: 110px;
+      height: 110px;
+      opacity: 0.9;
+      animation: slowRotate 140s linear infinite;
+      filter: drop-shadow(0 0 20px var(--sun-moon-glow));
+      transition: all 0.8s ease;
+    }
+
+    @keyframes slowRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Vintage Clouds */
+    .vintage-cloud {
+      position: absolute;
+      opacity: 0.35;
+      pointer-events: none;
+      animation: driftClouds linear infinite;
+    }
+
+    .cloud-a {
+      top: 18%;
+      left: -220px;
+      width: 220px;
+      animation-duration: 90s;
+    }
+
+    .cloud-b {
+      top: 45%;
+      left: -280px;
+      width: 280px;
+      animation-duration: 125s;
+      animation-delay: -45s;
+    }
+
+    @keyframes driftClouds {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(100vw + 400px)); }
+    }
+
+    /* Horizon Stone Balustrade & Cypress Hedges */
+    .horizon-barrier {
+      position: absolute;
+      top: 38%;
+      left: 0;
+      width: 100%;
+      height: 52px;
+      transform: translateY(-50%);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .horizon-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .horizon-mist {
+      position: absolute;
+      top: 36%;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Garden Soil Lawn (Planting Zone with Perspective) */
+    .lawn-zone {
+      position: absolute;
+      top: 38%;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(180deg, 
+        var(--lawn-top) 0%, 
+        var(--lawn-mid) 40%, 
+        var(--lawn-bottom) 100%
+      );
+      box-shadow: inset 0 20px 40px var(--lawn-shadow);
+      z-index: 2;
+      transition: background 0.8s ease, box-shadow 0.8s ease;
+    }
+
+    .lawn-zone::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(0, 0, 0, 0.09) 15%, transparent 16%), radial-gradient(rgba(255, 255, 255, 0.12) 15%, transparent 16%);
+      background-size: 16px 16px;
+      background-position: 0 0, 8px 8px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Interaction Surface */
+    #interaction-surface {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      cursor: crosshair;
+    }
+
+    /* Garden Bed Container */
+    #garden-bed {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 8;
+    }
+
+    /* Botanical Plant Node */
+    .botanical-plant {
+      position: absolute;
+      width: 220px;
+      height: 290px;
+      margin-left: -110px;
+      margin-top: -275px;
+      transform-origin: 110px 275px;
+      pointer-events: none;
+      filter: drop-shadow(0 14px 20px rgba(15, 25, 10, 0.4));
+    }
+
+    /* Ground Contact Shadow */
+    .ground-shadow {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(10, 18, 5, 0.65) 0%, rgba(10, 18, 5, 0.3) 50%, transparent 80%);
+      filter: blur(2.5px);
+      pointer-events: none;
+    }
+
+    /* Classical Editorial "GARDEN PARTY" Title Plaque */
+    .header-plaque {
+      position: absolute;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 95;
+      text-align: center;
+      pointer-events: none;
+      transition: all 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title-banner-wrap {
+      position: relative;
+      display: inline-block;
+      padding: 0 20px;
+    }
+
+    .title-banner {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 2.35rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--ink-black);
+      text-transform: uppercase;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 2px;
+      border-bottom: 1.5px solid var(--gold-foil);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9), 1px 2px 0 rgba(201, 158, 66, 0.25);
+      transition: all 0.5s ease;
+    }
+
+    .title-flourish-svg {
+      width: 30px;
+      height: 22px;
+      fill: none;
+      stroke: var(--gold-foil);
+      stroke-width: 1.4;
+      display: inline-block;
+      flex-shrink: 0;
+      margin: 0 6px;
+    }
+
+    .subtitle-script {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 1.55rem;
+      color: var(--ink-sepia);
+      margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ==========================================================================
+       🏛️ VICTORIAN ILLUMINATED BOTANICAL FOLIO (PERFECTLY COLLAPSIBLE)
+       ========================================================================== */
+
+    /* 1. Gilded Brass Pull-Tab / Button (Visible when Folio is Collapsed) */
+    .folio-dock-pill {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 95;
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-black);
+      background: var(--card-bg);
+      border: 1.5px solid var(--gold-foil);
+      outline: 1px solid rgba(201, 158, 66, 0.5);
+      outline-offset: -3px;
+      border-radius: 24px;
+      padding: 7px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .folio-dock-pill.is-active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .folio-dock-pill:hover {
+      background: var(--gold-light);
+      border-color: var(--gold-dark);
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .dock-ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--gold-foil);
+    }
+
+    /* 2. Main Botanical Herbarium Folio Modal / Ledger */
+    .folio-ledger-plaque {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 96;
+      width: calc(100% - 48px);
+      max-width: 1120px;
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid var(--gold-foil);
+      outline: 1px solid rgba(201, 158, 66, 0.45);
+      outline-offset: -5px;
+      box-shadow: var(--card-shadow), inset 0 0 20px var(--card-inset);
+      border-radius: 14px;
+      padding: 15px 28px 18px 28px;
+      box-sizing: border-box;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* When collapsed, completely vanishes with zero peaking or clutter */
+    .folio-ledger-plaque.is-collapsed {
+      transform: translateX(-50%) translateY(40px) scale(0.96);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Folio Header Banner */
+    .folio-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(201, 158, 66, 0.3);
+    }
+
+    .folio-headline {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-black);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .folio-headline-ornament {
+      color: var(--gold-foil);
+      font-size: 0.92rem;
+      line-height: 1;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    .folio-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .folio-tally-capsule {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-sepia);
+      background: rgba(201, 158, 66, 0.12);
+      border: 1px solid rgba(201, 158, 66, 0.35);
+      border-radius: 12px;
+      padding: 3px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .folio-tally-capsule strong {
+      color: var(--ink-black);
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .folio-collapse-btn {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-black);
+      background: transparent;
+      border: 1px solid rgba(201, 158, 66, 0.45);
+      border-radius: 14px;
+      padding: 4px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .folio-collapse-btn:hover {
+      background: var(--gold-light);
+      color: #1a1614;
+      border-color: var(--gold-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Grid Layout for Catalog Controls */
+    .folio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr 0.95fr 1.4fr;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    .folio-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .folio-field-label {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-sepia);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .folio-select-box {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink-black);
+      background-color: var(--input-bg);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1,1 L5,5 L9,1' stroke='%23c99e42' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      border: 1px solid var(--gold-foil);
+      border-radius: 6px;
+      padding: 6px 26px 6px 10px;
+      cursor: pointer;
+      outline: none;
+      height: 34px;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .folio-select-box:hover {
+      border-color: var(--gold-dark);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .folio-button-cluster {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .folio-action-btn {
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-black);
+      background: var(--input-bg);
+      border: 1px solid var(--gold-foil);
+      border-radius: 6px;
+      padding: 0 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 34px;
+      flex: 1 1 0;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .folio-action-btn span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .folio-action-btn:hover {
+      background: var(--gold-light);
+      color: #1f1a16;
+      border-color: var(--gold-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .folio-action-btn.active {
+      background: var(--gold-foil);
+      color: #ffffff;
+      border-color: var(--gold-dark);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Minimalist SVG Icon Styling */
+    .mini-icon {
+      width: 13px;
+      height: 13px;
+      display: inline-block;
+      vertical-align: middle;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.9;
+    }
+
+    /* Melodic Speed Indicator Toast */
+    .melody-indicator {
+      position: absolute;
+      bottom: 96px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 94;
+      background: var(--card-bg);
+      border: 1px solid var(--gold-foil);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-family: 'Bodoni Moda', 'Playfair Display', serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-sepia);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Sky Boundary Guidance Note */
+    .sky-guidance {
+      position: absolute;
+      top: calc(38% - 50px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 92;
+      background: var(--card-bg);
+      border: 1px solid var(--gold-foil);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--ink-sepia);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    /* Bugs & Butterflies Layer */
+    .bug-specimen {
+      position: absolute;
+      pointer-events: none;
+      z-index: 15;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+    }
+
+    /* Golden Stardust Sparkle */
+    .stardust {
+      position: absolute;
+      pointer-events: none;
+      z-index: 99;
+      transform: translate(-50%, -50%);
+    }
+
+    @media (max-width: 1080px) {
+      .folio-ledger-plaque {
+        max-width: 680px;
+        padding: 14px 22px 16px 22px;
+      }
+      .folio-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 18px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .folio-ledger-plaque {
+        width: calc(100% - 20px);
+        bottom: 12px;
+        padding: 12px 14px 14px 14px;
+      }
+      .folio-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .title-banner {
+        font-size: 1.35rem;
+        letter-spacing: 0.12em;
+        gap: 10px;
+      }
+      .title-flourish-svg {
+        width: 18px;
+        height: 14px;
+      }
+      .subtitle-script {
+        font-size: 1.15rem;
+      }
+      .sky-guidance {
+        font-size: 0.8rem;
+        width: 90%;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  
