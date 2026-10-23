@@ -22,7 +22,7 @@ const $ = id => document.getElementById(id);
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 const copy = value => JSON.parse(JSON.stringify(value));
 const specimenName = key => SPECIMENS.find(s => s[0] === key)?.[1] || 'Botanical specimen';
-const defaults = () => ({version:2, name:'My Botanical Garden', theme:'royal', variety:'all', melody:'clair', soundEnabled:false, motionEnabled:!matchMedia('(prefers-reduced-motion: reduce)').matches, living:false, plants:[]});
+const defaults = () => ({version:2, name:'My Botanical Garden', theme:'royal', variety:'all', musicTrack:'meadow', musicVolume:.28, soundEnabled:true, motionEnabled:!matchMedia('(prefers-reduced-motion: reduce)').matches, living:false, plants:[]});
 let state = defaults();
 let storageWorks = true;
 let firstVisit = true;
@@ -35,7 +35,8 @@ try {
       state.name = typeof saved.name === 'string' ? saved.name.slice(0,70) : state.name;
       state.theme = ['royal','night','sunset','pastel','herbarium'].includes(saved.theme) ? saved.theme : 'royal';
       state.variety = SPECIMENS.some(s=>s[0]===saved.variety) ? saved.variety : 'all';
-      state.melody = ['clair','ghibli','gymnopedie','canon','harp','mute'].includes(saved.melody) ? saved.melody : 'clair';
+      state.musicTrack = ['meadow','moonlight','clouds'].includes(saved.musicTrack) ? saved.musicTrack : 'meadow';
+      if(Number.isFinite(saved.musicVolume))state.musicVolume=clamp(saved.musicVolume,0,1);
       for (const key of ['soundEnabled','motionEnabled','living']) if (typeof saved[key]==='boolean') state[key]=saved[key];
       const ids = new Set();
       state.plants = saved.plants.filter(p => p && typeof p.id==='string' && !ids.has(p.id) && ids.add(p.id) && botanicalBuilders[p.variety] && Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.seed) && (!p.expiresAt || p.expiresAt>Date.now())).map(p=>({id:p.id, variety:p.variety, seed:p.seed>>>0, x:clamp(p.x,.01,.99), y:clamp(p.y,.025,.985), size:clamp(Number(p.size)||1,.65,1.5), tilt:clamp(Number(p.tilt)||0,-35,35), expiresAt:state.living && Number.isFinite(p.expiresAt) ? p.expiresAt : null}));
@@ -44,8 +45,6 @@ try {
 } catch { storageWorks = false; }
 const gardenBed = $('garden-bed');
 const surface = $('interaction-surface');
-const melodyIndicator = $('melodyIndicator');
-const melodyNoteText = $('melodyNoteText');
 const elements = new Map();
 const history = [];
 let selectedId = null;
@@ -94,14 +93,16 @@ function positionPlant(p) {
   const pos=rootPosition(p);
   el.style.left=`${pos.x}px`; el.style.top=`${pos.y}px`;
   el.style.zIndex=Math.round(pos.y);
+  el.style.setProperty('--handle-scale',1/plantScale(p));
   el.style.transform=`scale(${plantScale(p)}) rotate(${p.tilt}deg)`;
 }
 function renderPlant(p, grow=false) {
   const el=document.createElement('div');
   el.className='botanical-plant'; el.dataset.id=p.id;
-  el.setAttribute('role','button'); el.setAttribute('aria-label',`${specimenName(p.variety)}. Select to arrange.`);
+  el.setAttribute('role','button'); el.setAttribute('aria-label',`${specimenName(p.variety)}. Select to move or edit.`);
+  el.setAttribute('aria-pressed','false');
   el.tabIndex=tool==='edit'?0:-1;
-  el.innerHTML=`<div class="ground-shadow" style="width:90px"></div><div class="specimen-wind"><div class="specimen-growth">${generateBotanicalSVG(p.variety,p.seed)}</div></div>`;
+  el.innerHTML=`<div class="ground-shadow" style="width:90px"></div><div class="specimen-wind"><div class="specimen-growth">${generateBotanicalSVG(p.variety,p.seed)}</div></div><span class="plant-handle" aria-hidden="true"></span>`;
   el.style.setProperty('--sway-time',`${4.5+(p.seed%31)/10}s`);
   el.style.setProperty('--sway-delay',`${-(p.seed%40)/10}s`);
   gardenBed.appendChild(el); elements.set(p.id,el); positionPlant(p);
@@ -136,7 +137,7 @@ function plantAt(x,y,quiet=false) {
   const p={id:`flower-${++nextId}`,variety:key,seed,...normalizedPoint(x,y),size:1,tilt:(seed%11)-5,expiresAt:state.living?Date.now()+60000+seed%20000:null};
   state.plants.push(p); renderPlant(p,!quiet); changed();
   if(!quiet) {
-    playMelodicPlantNote(p.y);
+    if(state.soundEnabled)GardenAudio.playPlant(p.variety);
     if(state.motionEnabled && seed%11===0) spawnVisitor(x,y-90);
   }
   return true;
@@ -147,32 +148,51 @@ function setTool(value) {
   $('editTool').classList.toggle('active',tool==='edit'); $('editTool').setAttribute('aria-pressed',tool==='edit');
   elements.forEach(el=>el.tabIndex=tool==='edit'?0:-1);
   if(tool==='plant') selectPlant(null);
-  $('gardenHelp').textContent=tool==='plant'?'Choose a seed, then click or brush across the meadow.':'Select a flower to move, resize, or gently tilt it.';
+  surface.setAttribute('aria-label',tool==='plant'?'Garden planting area':'Garden arranging area');
+  $('gardenHelp').textContent=tool==='plant'?'Tap the meadow to plant. Drag to plant a trail.':'Tap a flower or its circle. Drag to move it.';
 }
 function selectPlant(id) {
   selectedId=id;
   elements.forEach((el,key)=>{el.classList.toggle('selected',key===id);el.setAttribute('aria-pressed',key===id);});
   const p=state.plants.find(p=>p.id===id);
   $('selectionTools').hidden=!p;
-  if(p) { $('selectionName').textContent=specimenName(p.variety); $('plantSize').value=p.size; $('plantTilt').value=p.tilt; }
+  if(p) { $('selectionName').textContent=specimenName(p.variety); $('plantSize').value=p.size; $('plantTilt').value=p.tilt; updateSelectionValues(); }
+}
+function updateSelectionValues() {
+  const size=`${Math.round(Number($('plantSize').value)*100)}%`;
+  const tilt=`${$('plantTilt').value}°`;
+  $('sizeValue').textContent=size; $('tiltValue').textContent=tilt;
+  $('plantSize').setAttribute('aria-valuetext',size); $('plantTilt').setAttribute('aria-valuetext',tilt);
+}
+function flowerAt(x,y) {
+  // Keep small flowers easy to grab, including the space between their leaves.
+  let nearest=null,score=Infinity;
+  for(const p of state.plants) {
+    const root=rootPosition(p),handleDistance=Math.hypot(x-root.x,y-root.y);
+    const r=elements.get(p.id)?.querySelector('.specimen-growth').getBoundingClientRect();
+    if(!r) continue;
+    if(handleDistance>24 && (x<r.left-12||x>r.right+12||y<r.top-12||y>r.bottom+12)) continue;
+    const distance=handleDistance<=24 ? handleDistance/100-10 : Math.hypot((x-(r.left+r.width/2))/Math.max(44,r.width),(y-(r.top+r.height*.55))/Math.max(44,r.height));
+    if(distance<score){score=distance;nearest=p;}
+  }
+  return nearest;
 }
 function pointerDown(e) {
   if(e.button!==0 || pointer) return;
-  const specimen=e.target.closest('.botanical-plant');
-  if(tool==='edit' && specimen) {
-    const p=state.plants.find(p=>p.id===specimen.dataset.id); if(!p) return;
-    selectPlant(p.id);
-    pointer={mode:'move',id:e.pointerId,plantId:p.id,startX:e.clientX,startY:e.clientY,origin:rootPosition(p),snapshot:copy(state.plants),changed:false,target:specimen};
-    specimen.setPointerCapture(e.pointerId); e.preventDefault();
-  } else if(e.currentTarget===surface) {
-    if(tool==='edit') {selectPlant(null);return;}
+  if(tool==='edit') {
+    const p=flowerAt(e.clientX,e.clientY);
+    selectPlant(p?.id||null);
+    if(!p) return;
+    pointer={mode:'move',id:e.pointerId,plantId:p.id,startX:e.clientX,startY:e.clientY,origin:rootPosition(p),snapshot:copy(state.plants),changed:false,target:surface};
+    document.body.dataset.dragging='true';
+  } else {
     if(e.clientY<innerHeight*.38) {spawnVisitor(e.clientX,e.clientY); return;}
     remember(); plantAt(e.clientX,e.clientY);
     pointer={mode:'paint',id:e.pointerId,x:e.clientX,y:e.clientY,target:surface};
-    surface.setPointerCapture(e.pointerId); e.preventDefault();
   }
+  surface.setPointerCapture(e.pointerId); e.preventDefault();
 }
-surface.addEventListener('pointerdown',pointerDown); gardenBed.addEventListener('pointerdown',pointerDown);
+surface.addEventListener('pointerdown',pointerDown);
 window.addEventListener('pointermove',e=>{
   if(!pointer || e.pointerId!==pointer.id) return;
   if(pointer.mode==='paint') {
@@ -191,7 +211,7 @@ window.addEventListener('pointermove',e=>{
 function endPointer(e) {
   if(pointer && pointer.id===e.pointerId) {
     if(pointer.target.hasPointerCapture(e.pointerId)) pointer.target.releasePointerCapture(e.pointerId);
-    pointer=null; saveGarden();
+    pointer=null; delete document.body.dataset.dragging; saveGarden();
   }
 }
 window.addEventListener('pointerup',endPointer);window.addEventListener('pointercancel',endPointer);
@@ -214,31 +234,70 @@ surface.addEventListener('keydown',e=>{
   if((e.key===' '||e.key==='Enter')&&tool==='plant') {e.preventDefault();remember();const pos=rootPosition(keyboardPoint);plantAt(pos.x,pos.y);}
 });
 window.addEventListener('keydown',e=>{
-  if(e.target.matches('input,select,textarea') || document.querySelector('dialog[open]')) return;
+  if(e.target.matches('input,select,textarea') || $('gardenPanel').open) return;
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z') {e.preventDefault();undo();}
   else if(!e.ctrlKey&&!e.metaKey&&e.key.toLowerCase()==='p') setTool('plant');
   else if(!e.ctrlKey&&!e.metaKey&&e.key.toLowerCase()==='e') setTool('edit');
-  else if(e.key==='Escape') selectPlant(null);
+  else if(e.key==='Escape') finishSelection();
 });
 for(const [id,key] of [['plantSize','size'],['plantTilt','tilt']]) {
   const control=$(id);let snapshot=null;
   const start=()=>{if(!snapshot)snapshot=copy(state.plants);};
   control.addEventListener('pointerdown',start);control.addEventListener('keydown',e=>{if(e.key.startsWith('Arrow')||['Home','End','PageUp','PageDown'].includes(e.key))start();});
-  control.addEventListener('input',()=>{const p=state.plants.find(p=>p.id===selectedId);if(!p)return;if(snapshot){remember(snapshot);snapshot=null;}p[key]=Number(control.value);positionPlant(p);changed();});
+  control.addEventListener('input',()=>{const p=state.plants.find(p=>p.id===selectedId);if(!p)return;if(snapshot){remember(snapshot);snapshot=null;}p[key]=Number(control.value);updateSelectionValues();positionPlant(p);changed();});
   control.addEventListener('change',()=>snapshot=null);
 }
 $('removePlant').addEventListener('click',removeSelected);
-$('selectionDone').addEventListener('click',()=>selectPlant(null));
+function finishSelection() { const node=elements.get(selectedId); selectPlant(null); node?.focus({preventScroll:true}); }
+$('selectionDone').addEventListener('click',finishSelection);
 $('undoButton').addEventListener('click',undo);
 $('plantTool').addEventListener('click',()=>setTool('plant'));
-$('editTool').addEventListener('click',()=>{setTool('edit');toast('Select a flower, then drag it to a new spot.');});
+$('editTool').addEventListener('click',()=>setTool('edit'));
 
-function openDialog(id) { selectPlant(null);$(id).showModal(); }
-document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>$(b.dataset.close).close()));
-document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}}));
-$('catalogueOpen').addEventListener('click',()=>openDialog('catalogueDialog'));
-$('folioOpen').addEventListener('click',()=>openDialog('folioDialog'));
-$('printOpen').addEventListener('click',()=>{$('printName').value=state.name;openDialog('printDialog');});
+const panel=$('gardenPanel');
+const panelTitles={flowers:'Choose your flowers',settings:'Garden settings',print:'Save your garden'};
+let panelOpener=null;
+function showPanel(view) {
+  document.querySelectorAll('[data-panel]').forEach(tab=>{
+    const active=tab.dataset.panel===view;
+    tab.setAttribute('aria-selected',active);tab.tabIndex=active?0:-1;
+    $(tab.getAttribute('aria-controls')).hidden=!active;
+  });
+  $('panelTitle').textContent=panelTitles[view];
+  if(view==='print') $('printName').value=state.name;
+  $(`${view}Panel`).scrollTop=0;
+}
+function openPanel(view,opener) {
+  panelOpener=opener;
+  if(view==='flowers') { $('seedSearch').value=''; filterCatalogue(); }
+  showPanel(view);
+  for(const id of ['catalogueOpen','folioOpen','printOpen']) $(id).setAttribute('aria-expanded',$(id)===opener);
+  panel.showModal();
+  document.querySelector(`[data-panel="${view}"]`).focus({preventScroll:true});
+}
+function closePanel() {panel.close();}
+panel.addEventListener('close',()=>{
+  for(const id of ['catalogueOpen','folioOpen','printOpen']) $(id).setAttribute('aria-expanded','false');
+  panelOpener?.focus({preventScroll:true});
+});
+$('panelClose').addEventListener('click',closePanel);
+panel.addEventListener('click',e=>{
+  if(e.target!==panel)return;
+  const r=panel.getBoundingClientRect();
+  if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closePanel();
+});
+const panelTabs=[...document.querySelectorAll('[data-panel]')];
+panelTabs.forEach((tab,i)=>{
+  tab.addEventListener('click',()=>showPanel(tab.dataset.panel));
+  tab.addEventListener('keydown',e=>{
+    const next={ArrowRight:(i+1)%3,ArrowLeft:(i+2)%3,Home:0,End:2}[e.key];
+    if(next===undefined)return;
+    e.preventDefault();showPanel(panelTabs[next].dataset.panel);panelTabs[next].focus({preventScroll:true});
+  });
+});
+$('catalogueOpen').addEventListener('click',()=>openPanel('flowers',$('catalogueOpen')));
+$('folioOpen').addEventListener('click',()=>openPanel('settings',$('folioOpen')));
+$('printOpen').addEventListener('click',()=>openPanel('print',$('printOpen')));
 function seedPreview(key,seed=51) {
   if(key==='all') return `<span class="mix-flowers">${['chamomile','rose','morningglory'].map((k,i)=>generateBotanicalSVG(k,seed+i)).join('')}</span>`;
   return generateBotanicalSVG(key,seed);
@@ -251,8 +310,15 @@ function updateSeedChoice() {
 function renderCatalogue() {
   $('seedCards').innerHTML=SPECIMENS.map(([key,name,latin],i)=>`<button class="seed-card" data-variety="${key}" aria-pressed="${key===state.variety}"><span aria-hidden="true">${seedPreview(key,123+i)}</span><strong>${name}</strong><small>${latin}</small></button>`).join('');
 }
-$('seedCards').addEventListener('click',e=>{const card=e.target.closest('.seed-card');if(!card)return;state.variety=card.dataset.variety;setTool('plant');updateSeedChoice();$('catalogueDialog').close();changed();toast(`${specimenName(state.variety)} selected. Plant on the meadow.`);});
-$('seedSearch').addEventListener('input',()=>{const query=$('seedSearch').value.trim().toLowerCase();let count=0;document.querySelectorAll('.seed-card').forEach(c=>{c.hidden=!c.textContent.toLowerCase().includes(query);if(!c.hidden)count++;});$('noSeeds').hidden=count!==0;});
+$('seedCards').addEventListener('click',e=>{const card=e.target.closest('.seed-card');if(!card)return;state.variety=card.dataset.variety;setTool('plant');updateSeedChoice();closePanel();changed();toast(`${specimenName(state.variety)} selected. Tap the meadow to plant.`);});
+function filterCatalogue() {
+  const query=$('seedSearch').value.trim().toLowerCase();let count=0;
+  document.querySelectorAll('.seed-card').forEach(c=>{c.hidden=!c.textContent.toLowerCase().includes(query);if(!c.hidden)count++;});
+  $('noSeeds').hidden=count!==0; $('clearSearch').disabled=!$('seedSearch').value;
+}
+$('seedSearch').addEventListener('input',filterCatalogue);
+$('clearSearch').addEventListener('click',()=>{$('seedSearch').value='';filterCatalogue();$('seedSearch').focus();});
+
 
 function setTheme() {
   document.body.dataset.theme=state.theme;
@@ -271,8 +337,25 @@ function drawStars() {
 function applyMotion() {document.body.dataset.motion=state.motionEnabled?'on':'off';}
 $('themeSelect').addEventListener('change',e=>{state.theme=e.target.value;setTheme();changed();});
 $('gardenName').addEventListener('input',e=>{state.name=e.target.value.slice(0,70);changed();});
-$('melodySelect').addEventListener('change',e=>{state.melody=e.target.value;melodyNoteIndex=0;changed();});
-$('soundEnabled').addEventListener('change',e=>{state.soundEnabled=e.target.checked;changed();if(state.soundEnabled)playMelodicPlantNote(.5);});
+let musicEnabled=false;
+GardenAudio.subscribe(({enabled,playing,supported})=>{
+  musicEnabled=enabled;
+  $('musicToggle').setAttribute('aria-pressed',enabled);
+  $('musicToggle').setAttribute('aria-label',enabled?'Pause background music':'Play background music');
+  $('musicToggleLabel').textContent=enabled?'Pause':'Music';
+  $('musicSettingsToggle').textContent=enabled?'Pause music':'Play music';
+  $('musicSettingsToggle').setAttribute('aria-pressed',enabled);
+  $('musicStatus').textContent=!supported?'Music is unavailable in this browser.':playing?'Playing softly in the background.':enabled?'Starting music…':'Press play for a little calm.';
+});
+async function toggleMusic() {
+  if(musicEnabled)GardenAudio.pauseMusic();
+  else if(await GardenAudio.startMusic()===false)toast('Music could not start. Try pressing Play music again.');
+}
+$('musicToggle').addEventListener('click',toggleMusic);
+$('musicSettingsToggle').addEventListener('click',toggleMusic);
+$('musicTrack').addEventListener('change',e=>{state.musicTrack=e.target.value;GardenAudio.setTrack(state.musicTrack);changed();});
+$('musicVolume').addEventListener('input',e=>{state.musicVolume=Number(e.target.value)/100;$('musicVolumeValue').textContent=`${e.target.value}%`;GardenAudio.setVolume(state.musicVolume);changed();});
+$('soundEnabled').addEventListener('change',e=>{state.soundEnabled=e.target.checked;changed();if(state.soundEnabled)GardenAudio.playPlant(state.variety==='all'?'chamomile':state.variety);});
 $('motionEnabled').addEventListener('change',e=>{state.motionEnabled=e.target.checked;applyMotion();changed();});
 $('lifeSelect').addEventListener('change',e=>{
   remember();state.living=e.target.value==='living';
@@ -281,7 +364,7 @@ $('lifeSelect').addEventListener('change',e=>{
 });
 $('harvestButton').addEventListener('click',()=>{
   if(!state.plants.length){toast('The meadow is already clear.');return;}
-  remember();state.plants=[];renderGarden();changed();$('folioDialog').close();toast('The meadow is clear. Undo restores your arrangement.');
+  remember();state.plants=[];selectPlant(null);renderGarden();changed();closePanel();toast('The meadow is clear. Undo restores your arrangement.');
 });
 setInterval(()=>{const now=Date.now();state.plants.filter(p=>p.expiresAt&&p.expiresAt<=now).forEach(p=>removeById(p.id));},1000);
 window.addEventListener('pagehide',saveGarden);
@@ -347,13 +430,15 @@ async function exportPrint() {
     if(title) {ctx.textAlign='center';ctx.fillStyle='#504a36';ctx.font=`${Math.max(24,width*.026)}px Georgia, serif`;ctx.fillText(title,width/2,header*.6,width-margin*3);}
     const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Image export failed')),'image/png'));
     const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`${(title||'botanical-garden').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'botanical-garden'}.png`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
-    $('printDialog').close();toast('Your botanical print is ready.');
+    closePanel();toast('Your botanical print is ready.');
   } catch {toast('The print could not be saved. Please try again.');}
-  finally {button.disabled=false;button.textContent='Save botanical print';}
+  finally {button.disabled=false;button.textContent='Download image';}
 }
 $('downloadPrint').addEventListener('click',exportPrint);
 
-$('themeSelect').value=state.theme;$('melodySelect').value=state.melody;$('gardenName').value=state.name;
+$('themeSelect').value=state.theme;$('gardenName').value=state.name;
+$('musicTrack').value=state.musicTrack;$('musicVolume').value=Math.round(state.musicVolume*100);$('musicVolumeValue').textContent=`${Math.round(state.musicVolume*100)}%`;
+GardenAudio.setTrack(state.musicTrack);GardenAudio.setVolume(state.musicVolume);
 $('soundEnabled').checked=state.soundEnabled;$('motionEnabled').checked=state.motionEnabled;$('lifeSelect').value=state.living?'living':'permanent';
 setTheme();applyMotion();engraveGrass();renderCatalogue();updateSeedChoice();setTool('plant');renderGarden();updateKeyboardCursor();
 if(firstVisit) {

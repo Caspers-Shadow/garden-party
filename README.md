@@ -10,8 +10,11 @@ A quiet, illustrated botanical garden. Choose a specimen from the seed catalogue
 - Automatic saving in the current browser on the current device.
 - Move, resize, tilt, remove, and undo changes to your arrangement.
 - High resolution PNG export on cream botanical paper or in your garden's colours.
-- Optional planting music, gentle motion, and keyboard controls.
-- Compact controls for phones and small screens.
+- Three original calm background arrangements with play, pause, track selection, and volume.
+- Short placement notes for each flower, all in one harmonious scale; flower sounds can be switched off independently.
+- Optional gentle motion and keyboard controls.
+- Clear Plant and Move modes, generous flower targets, and a tabbed menu for flowers, settings, and saving.
+- Touch-friendly controls for phones and small screens.
 
 ## Open locally
 
@@ -19,7 +22,7 @@ Open `index.html` in a modern browser. There is no build step and no JavaScript 
 
 ## Keyboard controls
 
-Focus the meadow, use the arrow keys to position the planting marker, and press Space or Enter to plant. Press **P** for Plant or **E** for Arrange. In Arrange mode, Tab reaches individual specimens; Enter selects one, the arrow keys move it, and Delete removes it. Use **Ctrl/Command + Z** to undo. Size and tilt controls support the keyboard too.
+Focus the meadow, use the arrow keys to position the planting marker, and press Space or Enter to plant. Press **P** for Plant or **E** for Move. In Move mode, Tab reaches individual specimens; Enter selects one, the arrow keys move it, and Delete removes it. Use **Ctrl/Command + Z** to undo. Size and tilt controls support the keyboard too.
 
 ## Saved arrangements
 
@@ -27,7 +30,7 @@ Arrangements and preferences are saved in browser local storage. They stay on th
 
 ## Project files
 
-- `index.html` — scenery, catalogue, controls, and dialogs.
+- `index.html` — scenery, catalogue, controls, and garden menu.
 - `styles.css` and `garden.css` — garden themes, illustration treatment, and responsive layouts.
 - `botanicals.js` — original SVG flower drawings and seeded specimen variations.
 - `garden.js` — planting, editing, saving, accessibility, and image export.

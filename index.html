@@ -97,22 +97,6 @@
   <!-- Dynamic Living Botanical Garden -->
   <div id="garden-bed" aria-label="Your planted specimens"></div>
 
-  <!-- Melodic Feedback Toast -->
-  <div class="melody-indicator" id="melodyIndicator" aria-hidden="true">
-    <svg class="mini-icon" viewBox="0 0 16 16">
-      <path d="M6,13 A2.5,2 0 1,1 3.5,11 A2.5,2 0 0,1 6,13 Z M6,11 L6,2 L13,4 L13,6 L8,4.5 L8,11.5 Z" fill="currentColor"/>
-    </svg>
-    <span id="melodyNoteText">Melody: Clair de Lune</span>
-  </div>
-
-  <!-- Sky Boundary Guidance Note -->
-  <div class="sky-guidance" id="skyGuidance">
-    <svg class="mini-icon" viewBox="0 0 16 16">
-      <path d="M8,15 L8,6 M8,6 C8,2.5 13,2.5 13,6 C10,6 8,6 8,6 Z M8,9 C8,5.5 3,5.5 3,9 C6,9 8,9 8,9 Z"/>
-    </svg>
-    <span id="gardenHelp">Choose a seed, then click or brush across the meadow.</span>
-  </div>
-
   <!-- Classical Editorial "GARDEN PARTY" Title Plaque -->
   <header class="header-plaque">
     <div class="title-banner-wrap">
@@ -134,52 +118,73 @@
   <!-- Bottom Victorian Gilded Scrollwork Border -->
   <div class="gilded-border border-bottom" id="bottomGildedBorder"></div>
 
-  <div class="garden-status" aria-live="polite"><span id="specimenCount">0</span> specimens <span aria-hidden="true">·</span> <span id="saveStatus">Your quiet corner</span></div>
+  <div class="garden-status"><span id="specimenCount">0</span> flowers <span aria-hidden="true">·</span> <span id="saveStatus">Your quiet corner</span></div>
   <nav class="garden-dock" aria-label="Garden tools">
-    <button id="catalogueOpen" class="seed-picker" aria-haspopup="dialog"><span id="selectedSeedPreview" aria-hidden="true"></span><span><small>Plant a little wonder</small><strong id="selectedSeedName">Botanical mix</strong></span><span aria-hidden="true">⌄</span></button>
-    <div class="dock-divider" aria-hidden="true"></div>
-    <button id="plantTool" class="tool-button active" aria-pressed="true" title="Plant flowers (P)"><span aria-hidden="true">❧</span><span>Plant</span></button>
-    <button id="editTool" class="tool-button" aria-pressed="false" title="Arrange flowers (E)"><span aria-hidden="true">✥</span><span>Arrange</span></button>
-    <button id="undoButton" class="tool-button" disabled title="Undo (Ctrl or Command + Z)"><span aria-hidden="true">↶</span><span>Undo</span></button>
-    <button id="printOpen" class="tool-button" aria-haspopup="dialog"><span aria-hidden="true">▧</span><span>Save print</span></button>
-    <button id="folioOpen" class="tool-button" aria-haspopup="dialog"><span aria-hidden="true">☷</span><span>Folio</span></button>
+    <div class="dock-primary">
+      <button id="catalogueOpen" class="seed-picker" aria-haspopup="dialog" aria-controls="gardenPanel" aria-expanded="false"><span id="selectedSeedPreview" aria-hidden="true"></span><span class="seed-picker-copy"><small>Choose flowers</small><strong id="selectedSeedName">Botanical mix</strong></span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+      <div class="mode-switch" role="group" aria-label="Garden mode">
+        <button id="plantTool" class="tool-button active" aria-pressed="true" title="Plant flowers (P)"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V10M12 14C4 15 3 9 3 6c6 0 9 2 9 8ZM12 10c0-6 3-8 9-8 0 6-3 9-9 8Z"/></svg><span>Plant</span></button>
+        <button id="editTool" class="tool-button" aria-pressed="false" title="Move and edit flowers (E)"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/></svg><span>Move</span></button>
+      </div>
+    </div>
+    <div class="dock-secondary">
+      <button id="musicToggle" class="tool-button" aria-pressed="false" aria-label="Play background music" title="Play or pause background music"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2"/><ellipse cx="17" cy="16" rx="3" ry="2"/></svg><span id="musicToggleLabel">Music</span></button>
+      <button id="undoButton" class="tool-button" disabled title="Undo (Ctrl or Command + Z)"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5 3 11l6 6M3 11h11a6 6 0 0 1 6 6v3"/></svg><span>Undo</span></button>
+      <button id="printOpen" class="tool-button" aria-haspopup="dialog" aria-controls="gardenPanel" aria-expanded="false"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/></svg><span>Save image</span></button>
+      <button id="folioOpen" class="tool-button" aria-haspopup="dialog" aria-controls="gardenPanel" aria-expanded="false"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="9" cy="18" r="2"/></svg><span>Settings</span></button>
+    </div>
+    <p id="gardenHelp" class="dock-help" aria-live="polite">Tap the meadow to plant. Drag to plant a trail.</p>
   </nav>
-  <aside id="selectionTools" class="selection-tools" aria-label="Selected specimen" hidden>
-    <strong id="selectionName">Selected flower</strong>
-    <label>Size <input id="plantSize" type="range" min="0.65" max="1.5" step="0.05" value="1"></label>
-    <label>Tilt <input id="plantTilt" type="range" min="-35" max="35" step="1" value="0"></label>
-    <button id="removePlant" class="quiet-button">Remove</button><button id="selectionDone" class="quiet-button">Done</button>
+
+  <aside id="selectionTools" class="selection-tools" aria-labelledby="selectionName" hidden>
+    <div class="selection-heading"><div><small>Selected flower</small><strong id="selectionName">Selected flower</strong></div><button id="selectionDone" class="quiet-button">Done</button></div>
+    <p>Drag the flower or its circle to move it.</p>
+    <div class="selection-sliders">
+      <label for="plantSize">Size <output id="sizeValue" for="plantSize">100%</output><input id="plantSize" type="range" min="0.65" max="1.5" step="0.05" value="1"></label>
+      <label for="plantTilt">Tilt <output id="tiltValue" for="plantTilt">0°</output><input id="plantTilt" type="range" min="-35" max="35" step="1" value="0"></label>
+    </div>
+    <button id="removePlant" class="quiet-button remove-flower">Remove flower</button>
   </aside>
 
-  <dialog id="catalogueDialog" class="botanical-dialog catalogue-dialog" aria-labelledby="catalogueTitle">
-    <div class="dialog-heading"><div><p class="eyebrow">The Botanical Compendium</p><h2 id="catalogueTitle">A catalogue of little wonders</h2></div><button class="close-dialog" data-close="catalogueDialog" aria-label="Close seed catalogue">×</button></div>
-    <p class="dialog-intro">Choose a specimen to grow in your own corner of the world.</p>
-    <label class="search-label" for="seedSearch">Find a flower</label><input type="search" id="seedSearch" placeholder="Rose, morning glory, chamomile…" autocomplete="off">
-    <div id="seedCards" class="seed-grid"></div><p id="noSeeds" hidden>No specimens match that name.</p>
-  </dialog>
-
-  <dialog id="folioDialog" class="botanical-dialog folio-dialog" aria-labelledby="folioTitle">
-    <div class="dialog-heading"><div><p class="eyebrow">Notes from the meadow</p><h2 id="folioTitle">Your botanical folio</h2></div><button class="close-dialog" data-close="folioDialog" aria-label="Close botanical folio">×</button></div>
-    <div class="settings-grid">
-      <label>Garden name<input id="gardenName" maxlength="70" placeholder="My Botanical Garden" autocomplete="off"></label>
-      <label>Garden realm<select id="themeSelect"><option value="royal">Royal Garden · Day</option><option value="night">Moonlit Sanctuary</option><option value="sunset">Sunset Serenade</option><option value="pastel">Pastel Rococo</option><option value="herbarium">Antique Herbarium</option></select></label>
-      <label>Planting mode<select id="lifeSelect"><option value="permanent">Permanent · stay and grow</option><option value="living">Living · gently fade after a minute</option></select></label>
-      <label>Musical score<select id="melodySelect"><option value="clair">Clair de Lune · Debussy</option><option value="ghibli">Meadow Breeze · Summer Waltz</option><option value="gymnopedie">Gymnopédie No. 1 · Satie</option><option value="canon">Music Box · Canon in D</option><option value="harp">Romantic Folk Harp</option><option value="mute">Silence</option></select></label>
+  <dialog id="gardenPanel" class="botanical-dialog" aria-labelledby="panelTitle">
+    <div class="panel-header"><div><p class="eyebrow">Garden Party</p><h2 id="panelTitle">Choose your flowers</h2></div><button id="panelClose" class="quiet-button back-to-garden"><span aria-hidden="true">←</span> Back to garden</button></div>
+    <div class="panel-tabs" role="tablist" aria-label="Garden menu">
+      <button id="flowersTab" role="tab" aria-selected="true" aria-controls="flowersPanel" tabindex="0" data-panel="flowers">Flowers</button>
+      <button id="settingsTab" role="tab" aria-selected="false" aria-controls="settingsPanel" tabindex="-1" data-panel="settings">Settings</button>
+      <button id="printTab" role="tab" aria-selected="false" aria-controls="printPanel" tabindex="-1" data-panel="print">Save image</button>
     </div>
-    <label class="check-row"><input type="checkbox" id="soundEnabled"> Play a soft note as I plant</label>
-    <label class="check-row"><input type="checkbox" id="motionEnabled"> Gentle motion and garden visitors</label>
-    <p class="folio-note">Your garden is saved in this browser on this device. Clearing browser data removes that saved garden.</p>
-    <details class="garden-help"><summary>A few notes on tending your garden</summary><p>Click or drag on the meadow to plant. Choose Arrange, then drag a flower to move it. Use the size and tilt controls to shape your arrangement.</p><p>Keyboard: focus the meadow and use the arrow keys to move the planting marker; Space or Enter plants a flower. P selects Plant, E selects Arrange. In Arrange, Tab reaches each specimen; Enter selects it, arrow keys move it, and Delete removes it. Ctrl/Command + Z undoes your last change.</p></details>
-    <button id="harvestButton" class="quiet-button harvest-button">Gather all specimens</button>
-  </dialog>
-
-  <dialog id="printDialog" class="botanical-dialog print-dialog" aria-labelledby="printTitle">
-    <div class="dialog-heading"><div><p class="eyebrow">A keepsake from the garden</p><h2 id="printTitle">Your botanical print</h2></div><button class="close-dialog" data-close="printDialog" aria-label="Close print settings">×</button></div>
-    <label>Print title<input id="printName" maxlength="70" placeholder="My Botanical Garden"></label>
-    <label>Paper & atmosphere<select id="printStyle"><option value="paper">Cream botanical paper</option><option value="scene">Garden colours</option></select></label>
-    <label class="check-row"><input type="checkbox" id="printBorder" checked> Include a decorative border</label>
-    <p class="folio-note">Save a high resolution PNG of your arrangement, without the garden controls.</p>
-    <button id="downloadPrint" class="primary-button">Save botanical print</button>
+    <section id="flowersPanel" class="panel-view" role="tabpanel" aria-labelledby="flowersTab">
+      <p class="dialog-intro">Choose a flower, then tap anywhere on the meadow to plant it.</p>
+      <label class="search-label" for="seedSearch">Find a flower</label><div class="search-row"><input type="search" id="seedSearch" placeholder="Try rose, lily, or chamomile…" autocomplete="off"><button id="clearSearch" class="quiet-button" disabled>Clear</button></div>
+      <div id="seedCards" class="seed-grid"></div><p id="noSeeds" hidden>No flowers found. Try another name or clear your search.</p>
+    </section>
+    <section id="settingsPanel" class="panel-view" role="tabpanel" aria-labelledby="settingsTab" hidden>
+      <div class="settings-grid">
+        <label>Garden name<input id="gardenName" maxlength="70" placeholder="My Botanical Garden" autocomplete="off"></label>
+        <label>Atmosphere<select id="themeSelect"><option value="royal">Royal Garden · Day</option><option value="night">Moonlit Sanctuary</option><option value="sunset">Sunset Serenade</option><option value="pastel">Pastel Rococo</option><option value="herbarium">Antique Herbarium</option></select></label>
+        <label>Flower lifespan<select id="lifeSelect"><option value="permanent">Keep my flowers</option><option value="living">Gently fade after a minute</option></select></label>
+      </div>
+      <section class="sound-settings" aria-labelledby="soundTitle">
+        <h3 id="soundTitle">A little atmosphere</h3>
+        <label for="musicTrack">Background music</label><div class="music-controls"><select id="musicTrack"><option value="meadow">Quiet meadow · soft keys</option><option value="moonlight">Moonlit pond · warm harp</option><option value="clouds">Drifting clouds · airy bells</option></select><button id="musicSettingsToggle" class="quiet-button" aria-pressed="false">Play music</button></div>
+        <p id="musicStatus" class="action-note" role="status">Press play for a little calm.</p>
+        <label class="volume-label" for="musicVolume">Music volume <output id="musicVolumeValue" for="musicVolume">28%</output><input type="range" id="musicVolume" min="0" max="100" step="1" value="28"></label>
+        <label class="check-row"><input type="checkbox" id="soundEnabled"> Quiet flower placement sounds</label>
+        <p class="action-note">Each flower has its own soft note. Mixed flowers stay in harmony.</p>
+      </section>
+      <label class="check-row"><input type="checkbox" id="motionEnabled"> Gentle motion and garden visitors</label>
+      <p class="folio-note">Your garden saves automatically in this browser on this device.</p>
+      <details class="garden-help"><summary>How to use your garden</summary><p><strong>Plant:</strong> choose Flowers, pick a specimen, then tap or drag across the meadow. <strong>Move:</strong> tap a flower or its circle, then drag to reposition it. Use Size and Tilt to adjust it. Undo brings back your last change.</p><p>Keyboard: focus the meadow and use the arrows to move the planting marker; Space or Enter plants. P selects Plant, E selects Move. In Move mode, Tab reaches each flower; Enter selects it, arrows move it, and Delete removes it. Ctrl/Command + Z undoes a change. Escape closes this menu or finishes editing.</p><p>Clearing browser data removes your saved garden. Save an image to keep a picture of it.</p></details>
+      <button id="harvestButton" class="quiet-button harvest-button">Clear garden</button><p class="action-note">Clears all flowers. You can undo this.</p>
+    </section>
+    <section id="printPanel" class="panel-view print-panel" role="tabpanel" aria-labelledby="printTab" hidden>
+      <p class="dialog-intro">Keep your arrangement as a high resolution botanical print.</p>
+      <label>Image title<input id="printName" maxlength="70" placeholder="My Botanical Garden"></label>
+      <label>Background<select id="printStyle"><option value="paper">Cream botanical paper</option><option value="scene">Garden colours</option></select></label>
+      <label class="check-row"><input type="checkbox" id="printBorder" checked> Include a decorative border</label>
+      <p class="folio-note">Downloads a PNG image with the garden controls removed.</p>
+      <button id="downloadPrint" class="primary-button">Download image</button>
+    </section>
   </dialog>
   <div id="gardenToast" role="status" aria-live="polite"></div>
   <script src="botanicals.js" defer></script><script src="visitors.js" defer></script><script src="sound.js" defer></script><script src="garden.js" defer></script>
