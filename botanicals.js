@@ -130,7 +130,7 @@
     }
 
     function botanicalBud(id, x, y, scale = 1, tone = 'rose', angle = -20) {
-      return `<g transform="translate(${x},${y}) rotate(${angle}) scale(${scale})"><g class="plant-flower-head">
+      return `<g transform="translate(${x},${y}) rotate(${angle}) scale(${scale})"><g class="plant-flower-head botanical-bud">
         <path d="M0,8 C-12,-2 -11,-19 -2,-25 C10,-22 13,-6 0,8 Z" fill="url(#${id}-${tone})" stroke="${botanicalPalettes[tone][2]}" stroke-width=".8"/>
         <path d="M0,8 C-7,-1 -12,-5 -11,-12 L0,-2 7,-16 Q12,-2 0,8" fill="#77805b" stroke="#535a3c" stroke-width=".7"/>
         <path d="M-2,-4 Q-6,-15 -2,-21 M3,-6 Q7,-14 2,-21" fill="none" stroke="${botanicalPalettes[tone][2]}" stroke-width=".5"/>

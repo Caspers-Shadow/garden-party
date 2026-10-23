@@ -6,7 +6,7 @@ A quiet, illustrated botanical garden. Choose a specimen from the seed catalogue
 
 - Fourteen illustrated specimens, with variations in petals, foliage, height, and orientation.
 - Five garden atmospheres: day, moonlight, sunset, pastel, and antique herbarium.
-- Seeds sprout and grow into flowers by default. Switch off Grow flowers from seeds in Settings for instant full-grown flowers.
+- Seeds grow with rising stems, unfolding leaves, and buds that open petal by petal. Switch off Grow flowers from seeds in Settings for instant full-grown flowers.
 - Permanent planting by default, plus an optional living mode.
 - Automatic saving in the current browser on the current device.
 - Move, resize, tilt, remove, and undo changes to your arrangement.
