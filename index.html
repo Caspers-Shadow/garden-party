@@ -13,7 +13,7 @@
 
 
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="garden.css">
+  <link rel="stylesheet" href="garden.css?v=20261023-seeds">
 </head>
 <body data-theme="royal">
 
@@ -118,7 +118,7 @@
   <!-- Bottom Victorian Gilded Scrollwork Border -->
   <div class="gilded-border border-bottom" id="bottomGildedBorder"></div>
 
-  <div class="garden-status"><span id="specimenCount">0</span> flowers <span aria-hidden="true">·</span> <span id="saveStatus">Your quiet corner</span></div>
+  <div class="garden-status"><span id="specimenCount">0</span> planted <span aria-hidden="true">·</span> <span id="saveStatus">Your quiet corner</span></div>
   <nav class="garden-dock" aria-label="Garden tools">
     <div class="dock-primary">
       <button id="catalogueOpen" class="seed-picker" aria-haspopup="dialog" aria-controls="gardenPanel" aria-expanded="false"><span id="selectedSeedPreview" aria-hidden="true"></span><span class="seed-picker-copy"><small>Choose flowers</small><strong id="selectedSeedName">Botanical mix</strong></span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
@@ -154,7 +154,7 @@
       <button id="printTab" role="tab" aria-selected="false" aria-controls="printPanel" tabindex="-1" data-panel="print">Save image</button>
     </div>
     <section id="flowersPanel" class="panel-view" role="tabpanel" aria-labelledby="flowersTab">
-      <p class="dialog-intro">Choose a flower, then tap anywhere on the meadow to plant it.</p>
+      <p id="catalogueIntro" class="dialog-intro">Choose a flower, then tap the meadow to sow its seeds.</p>
       <label class="search-label" for="seedSearch">Find a flower</label><div class="search-row"><input type="search" id="seedSearch" placeholder="Try rose, lily, or chamomile…" autocomplete="off"><button id="clearSearch" class="quiet-button" disabled>Clear</button></div>
       <div id="seedCards" class="seed-grid"></div><p id="noSeeds" hidden>No flowers found. Try another name or clear your search.</p>
     </section>
@@ -164,17 +164,20 @@
         <label>Atmosphere<select id="themeSelect"><option value="royal">Royal Garden · Day</option><option value="night">Moonlit Sanctuary</option><option value="sunset">Sunset Serenade</option><option value="pastel">Pastel Rococo</option><option value="herbarium">Antique Herbarium</option></select></label>
         <label>Flower lifespan<select id="lifeSelect"><option value="permanent">Keep my flowers</option><option value="living">Gently fade after a minute</option></select></label>
       </div>
+      <label class="check-row"><input type="checkbox" id="growFromSeeds" checked aria-describedby="growthDescription"> Grow flowers from seeds</label>
+      <p id="growthDescription" class="action-note">Watch seeds sprout and blossom over a few seconds. Turn off to plant full-grown flowers.</p>
       <section class="sound-settings" aria-labelledby="soundTitle">
         <h3 id="soundTitle">A little atmosphere</h3>
         <label for="musicTrack">Background music</label><div class="music-controls"><select id="musicTrack"><option value="meadow">Quiet meadow · airy flute</option><option value="moonlight">Still water · flute & flowing water</option><option value="clouds">Drifting clouds · deep ambience</option></select><button id="musicSettingsToggle" class="quiet-button" aria-pressed="false">Play music</button></div>
         <p id="musicStatus" class="action-note" role="status">Press play for a little calm.</p>
         <label class="volume-label" for="musicVolume">Music volume <output id="musicVolumeValue" for="musicVolume">28%</output><input type="range" id="musicVolume" min="0" max="100" step="1" value="28"></label>
         <label class="check-row"><input type="checkbox" id="soundEnabled"> Quiet flower placement sounds</label>
-        <p class="action-note">Soft wooden taps and leaf rustles, with a different touch for each flower.</p>
+        <label class="volume-label" for="plantVolume">Planting sound volume <output id="plantVolumeValue" for="plantVolume">20%</output><input type="range" id="plantVolume" min="0" max="100" step="1" value="20"></label>
+        <p class="action-note">One soft sound per click or drag. Scattering seeds stays quiet.</p>
       </section>
       <label class="check-row"><input type="checkbox" id="motionEnabled"> Gentle motion and garden visitors</label>
       <p class="folio-note">Your garden saves automatically in this browser on this device.</p>
-      <details class="garden-help"><summary>How to use your garden</summary><p><strong>Plant:</strong> choose Flowers, pick a specimen, then tap or drag across the meadow. <strong>Move:</strong> tap a flower or its circle, then drag to reposition it. Use Size and Tilt to adjust it. Undo brings back your last change.</p><p>Keyboard: focus the meadow and use the arrows to move the planting marker; Space or Enter plants. P selects Plant, E selects Move. In Move mode, Tab reaches each flower; Enter selects it, arrows move it, and Delete removes it. Ctrl/Command + Z undoes a change. Escape closes this menu or finishes editing.</p><p>Clearing browser data removes your saved garden. Save an image to keep a picture of it.</p></details>
+      <details class="garden-help"><summary>How to use your garden</summary><p><strong>Plant:</strong> choose Flowers, pick a specimen, then tap or drag across the meadow. Seeds grow into flowers unless you switch off Grow flowers from seeds. <strong>Move:</strong> tap a flower or its circle, then drag to reposition it. Use Size and Tilt to adjust it. Undo brings back your last change.</p><p>Keyboard: focus the meadow and use the arrows to move the planting marker; Space or Enter plants. P selects Plant, E selects Move. In Move mode, Tab reaches each flower; Enter selects it, arrows move it, and Delete removes it. Ctrl/Command + Z undoes a change. Escape closes this menu or finishes editing.</p><p>Clearing browser data removes your saved garden. Save an image to keep a picture of it.</p></details>
       <button id="harvestButton" class="quiet-button harvest-button">Clear garden</button><p class="action-note">Clears all flowers. You can undo this.</p>
     </section>
     <section id="printPanel" class="panel-view print-panel" role="tabpanel" aria-labelledby="printTab" hidden>
@@ -182,11 +185,11 @@
       <label>Image title<input id="printName" maxlength="70" placeholder="My Botanical Garden"></label>
       <label>Background<select id="printStyle"><option value="paper">Cream botanical paper</option><option value="scene">Garden colours</option></select></label>
       <label class="check-row"><input type="checkbox" id="printBorder" checked> Include a decorative border</label>
-      <p class="folio-note">Downloads a PNG image with the garden controls removed.</p>
+      <p class="folio-note">Downloads a PNG image with the garden controls removed. Flowers appear in full bloom.</p>
       <button id="downloadPrint" class="primary-button">Download image</button>
     </section>
   </dialog>
   <div id="gardenToast" role="status" aria-live="polite"></div>
-  <script src="botanicals.js" defer></script><script src="visitors.js" defer></script><script src="sound.js?v=20261023-ambient" defer></script><script src="garden.js" defer></script>
+  <script src="botanicals.js" defer></script><script src="visitors.js" defer></script><script src="sound.js?v=20261023-soft" defer></script><script src="garden.js?v=20261023-seeds" defer></script>
 </body>
 </html>

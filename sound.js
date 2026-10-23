@@ -1,8 +1,8 @@
 'use strict';
 
 // Original ambient arrangements: long overlapping harmonies, breathy flute,
-// and quiet air/water textures. Flower feedback uses short filtered-noise
-// percussion, with no electronic oscillator or ringing notification tone.
+// and quiet air/water textures. Flower feedback is a very quiet, softly rounded air sound.
+// It has no sharp impact, electronic note, or ringing notification tone.
 const GardenAudio = (() => {
   const TRACKS = {
     meadow:{chordSeconds:26,padLength:36,padLevel:.065,air:.014,water:0,fluteGap:8.6,fluteLength:6.8,fluteLevel:.052,melody:[67,64,null,62,60,null,64,67,null,69,67,null,64,62,null,60]},
@@ -10,15 +10,10 @@ const GardenAudio = (() => {
     clouds:{chordSeconds:34,padLength:46,padLevel:.07,air:.02,water:0,fluteGap:12,fluteLength:9,fluteLevel:.026,melody:[null,60,null,null,64,null,null,62,null,null,67,null,null,64,null,null]}
   };
   const CHORDS=[[48,55,60,64],[45,52,57,60],[50,55,57,62],[48,55,62,64]];
-  // Pitch gently colours the wooden body; the leaf layer stays unpitched.
-  const FLOWERS={
-    primrose:[52,1150,.14],anemone:[60,1700,.13],wildrose:[55,1000,.17],hydrangea:[50,900,.18],
-    morningglory:[57,1350,.16],chamomile:[64,1900,.12],rose:[48,850,.19],jasmine:[62,1850,.13],
-    lily:[55,1500,.15],poppy:[50,1250,.14],foxglove:[57,1100,.17],peony:[52,950,.19],
-    sunflower:[48,780,.18],urn:[43,620,.2]
-  };
+  // Small changes of colour keep every placement in the same soft family.
+  const FLOWERS={primrose:[470,.25],anemone:[560,.24],wildrose:[430,.27],hydrangea:[410,.28],morningglory:[500,.26],chamomile:[590,.23],rose:[380,.28],jasmine:[570,.24],lily:[520,.25],poppy:[460,.25],foxglove:[450,.27],peony:[400,.29],sunflower:[360,.28],urn:[320,.27]};
   let context=null,output=null,plantBus=null,noise=null,brownNoise=null,impulse=null,padWave=null,fluteWave=null;
-  let currentRun=null,track='meadow',volume=.28,wanted=false,generation=0,listener=()=>{};
+  let currentRun=null,track='meadow',volume=.28,plantVolume=.2,lastPlantTime=-Infinity,wanted=false,generation=0,listener=()=>{};
   const plantVoices=new Set(),plantBuffers=new Map();
   const supported=!!(window.AudioContext||window.webkitAudioContext);
   const frequency=midi=>440*Math.pow(2,(midi-69)/12);
@@ -38,7 +33,7 @@ const GardenAudio = (() => {
     if(!context) {
       context=new (window.AudioContext||window.webkitAudioContext)();
       output=context.createDynamicsCompressor();output.threshold.value=-20;output.knee.value=24;output.ratio.value=3;output.attack.value=.015;output.release.value=.4;output.connect(context.destination);
-      plantBus=context.createGain();plantBus.gain.value=.6;plantBus.connect(output);
+      plantBus=context.createGain();plantBus.gain.value=plantVolume;plantBus.connect(output);
       noise=noiseBuffer(8);brownNoise=noiseBuffer(12,true);
       padWave=context.createPeriodicWave(new Float32Array(7),new Float32Array([0,1,.22,.09,.035,.012,.006]));
       fluteWave=context.createPeriodicWave(new Float32Array(6),new Float32Array([0,1,.13,.045,.018,.005]));
@@ -128,33 +123,37 @@ const GardenAudio = (() => {
   function setTrack(value){if(!TRACKS[value])return;track=value;if(wanted)void startMusic();else notify();}
   function setVolume(value){volume=Math.max(0,Math.min(1,Number(value)||0));if(currentRun){const gain=currentRun.bus.gain,t=context.currentTime;gain.cancelScheduledValues(t);gain.setTargetAtTime(volume,t,.15);}}
 
-  function placementBuffer(variety) {
-    if(plantBuffers.has(variety))return plantBuffers.get(variety);
-    const [midi,leafCutoff,length]=FLOWERS[variety]||FLOWERS.chamomile;
-    const sampleRate=context.sampleRate,buffer=context.createBuffer(1,Math.ceil(sampleRate*(length+.04)),sampleRate),data=buffer.getChannelData(0);
-    const seed=[...variety].reduce((n,c)=>Math.imul(n,31)+c.charCodeAt(0),17),next=random(seed);
-    // Noise excites a broad, damped wooden resonance rather than a pure tone.
-    const bodyCutoff=frequency(midi),r=Math.exp(-1/(sampleRate*.009)),coefficient=2*r*Math.cos(2*Math.PI*bodyCutoff/sampleRate);
-    const leafAlpha=1-Math.exp(-2*Math.PI*leafCutoff/sampleRate),bodyAlpha=1-Math.exp(-2*Math.PI*450/sampleRate);
-    let y1=0,y2=0,leaf=0,body=0,peak=0;
-    for(let i=0;i<data.length;i++){
-      const t=i/sampleRate,white=next();leaf+=leafAlpha*(white-leaf);body+=bodyAlpha*(white-body);
-      const excitation=body*Math.exp(-t/.004),resonance=excitation+coefficient*y1-r*r*y2;y2=y1;y1=resonance;
-      const attack=1-Math.exp(-t/.006),release=Math.pow(Math.max(0,1-t/length),2);
-      data[i]=(resonance*.006+leaf*.34)*attack*release;peak=Math.max(peak,Math.abs(data[i]));
-    }
-    for(let i=0;i<data.length;i++)data[i]=data[i]/Math.max(.001,peak)*.032;
-    plantBuffers.set(variety,buffer);return buffer;
+function setPlantVolume(value) {
+  plantVolume=Math.max(0,Math.min(1,Number(value)||0));
+  if(plantBus)plantBus.gain.setTargetAtTime(plantVolume,context.currentTime,.03);
+}
+function placementBuffer(variety) {
+  if(plantBuffers.has(variety))return plantBuffers.get(variety);
+  const [cutoff,length]=FLOWERS[variety]||FLOWERS.chamomile;
+  const sampleRate=context.sampleRate,buffer=context.createBuffer(1,Math.ceil(sampleRate*(length+.02)),sampleRate),data=buffer.getChannelData(0);
+  const seed=[...variety].reduce((n,c)=>Math.imul(n,31)+c.charCodeAt(0),17),next=random(seed);
+  const alpha=1-Math.exp(-2*Math.PI*cutoff/sampleRate),dcAlpha=1-Math.exp(-2*Math.PI*85/sampleRate);
+  let low=0,smooth=0,dc=0,peak=0;
+  for(let i=0;i<data.length;i++){
+    low+=alpha*(next()-low);smooth+=alpha*(low-smooth);dc+=dcAlpha*(smooth-dc);
+    const progress=Math.min(1,i/(sampleRate*length));
+    // A rounded swell has no sharp onset, resonant knock, or ringing tail.
+    const envelope=Math.pow(Math.sin(Math.PI*progress),2);
+    data[i]=(smooth-dc)*envelope;peak=Math.max(peak,Math.abs(data[i]));
   }
-  function playPlant(variety) {
-    if(document.hidden)return;
-    try{
-      const ctx=audioContext();if(!ctx)return;if(ctx.state!=='running')void ctx.resume().catch(()=>{});
-      if(plantVoices.size>=8){const oldest=plantVoices.values().next().value;plantVoices.delete(oldest);oldest.stop(ctx.currentTime+.03);}
-      const source=ctx.createBufferSource();source.buffer=placementBuffer(variety);source.connect(plantBus);register([source],[source],plantVoices);source.start(ctx.currentTime+.006);
-    }catch{/* Keep planting available when audio is unavailable. */}
-  }
+  for(let i=0;i<data.length;i++)data[i]=data[i]/Math.max(.000001,peak)*.014;
+  plantBuffers.set(variety,buffer);return buffer;
+}
+function playPlant(variety) {
+  if(document.hidden||plantVolume===0)return;
+  try{
+    const ctx=audioContext();if(!ctx)return;if(ctx.state!=='running')void ctx.resume().catch(()=>{});
+    if(ctx.currentTime-lastPlantTime<.2)return;lastPlantTime=ctx.currentTime;
+    if(plantVoices.size>=2){const oldest=plantVoices.values().next().value;plantVoices.delete(oldest);oldest.stop(ctx.currentTime+.025);}
+    const source=ctx.createBufferSource();source.buffer=placementBuffer(variety);source.connect(plantBus);register([source],[source],plantVoices);source.start(ctx.currentTime+.006);
+  }catch{/* Keep planting available when audio is unavailable. */}
+}
   document.addEventListener('visibilitychange',()=>{if(document.hidden){generation++;fadeRun();if(context)plantVoices.forEach(v=>v.stop(context.currentTime+.03));notify();}else if(wanted)void startMusic();});
   window.addEventListener('pagehide',()=>{generation++;fadeRun();if(context)plantVoices.forEach(v=>v.stop(context.currentTime+.03));});
-  return {startMusic,pauseMusic,setTrack,setVolume,playPlant,subscribe(callback){listener=callback;notify();}};
+  return {startMusic,pauseMusic,setTrack,setVolume,setPlantVolume,playPlant,subscribe(callback){listener=callback;notify();}};
 })();

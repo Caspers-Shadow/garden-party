@@ -84,3 +84,13 @@ body[data-motion="off"] *,body[data-motion="off"] *::before,body[data-motion="of
 .panel-view{overflow-y:auto;overscroll-behavior:contain;min-height:0}
 @media(min-height:561px){.selection-tools{top:174px;bottom:auto}}
 @media(max-width:680px) and (min-height:561px){.selection-tools{top:166px;bottom:auto}}
+
+/* A seed settles at the planting point, sprouts, and opens into its flower. */
+.germination{position:absolute;left:110px;top:275px;width:0;height:0;pointer-events:none}
+.seed-visual{position:absolute;left:0;top:0;width:30px;height:22px;transform:translate(-50%,-65%) scale(var(--handle-scale));transform-origin:50% 65%}
+.botanical-plant .seed-visual svg{width:30px;height:22px}
+.sprout-visual{position:absolute;left:-30px;bottom:0;width:60px;height:80px;transform:scale(var(--sprout-growth,1));transform-origin:30px 76px}
+.botanical-plant .sprout-visual svg{width:60px;height:80px}
+.botanical-plant[data-growth="seed"] .ground-shadow{opacity:.15;width:25px!important}
+.botanical-plant[data-growth="sprout"] .ground-shadow{opacity:.22;width:40px!important}
+.botanical-plant:not([data-growth="mature"]) .specimen-wind{animation:none;transform:none}
