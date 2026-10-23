@@ -166,11 +166,11 @@
       </div>
       <section class="sound-settings" aria-labelledby="soundTitle">
         <h3 id="soundTitle">A little atmosphere</h3>
-        <label for="musicTrack">Background music</label><div class="music-controls"><select id="musicTrack"><option value="meadow">Quiet meadow · soft keys</option><option value="moonlight">Moonlit pond · warm harp</option><option value="clouds">Drifting clouds · airy bells</option></select><button id="musicSettingsToggle" class="quiet-button" aria-pressed="false">Play music</button></div>
+        <label for="musicTrack">Background music</label><div class="music-controls"><select id="musicTrack"><option value="meadow">Quiet meadow · airy flute</option><option value="moonlight">Still water · flute & flowing water</option><option value="clouds">Drifting clouds · deep ambience</option></select><button id="musicSettingsToggle" class="quiet-button" aria-pressed="false">Play music</button></div>
         <p id="musicStatus" class="action-note" role="status">Press play for a little calm.</p>
         <label class="volume-label" for="musicVolume">Music volume <output id="musicVolumeValue" for="musicVolume">28%</output><input type="range" id="musicVolume" min="0" max="100" step="1" value="28"></label>
         <label class="check-row"><input type="checkbox" id="soundEnabled"> Quiet flower placement sounds</label>
-        <p class="action-note">Each flower has its own soft note. Mixed flowers stay in harmony.</p>
+        <p class="action-note">Soft wooden taps and leaf rustles, with a different touch for each flower.</p>
       </section>
       <label class="check-row"><input type="checkbox" id="motionEnabled"> Gentle motion and garden visitors</label>
       <p class="folio-note">Your garden saves automatically in this browser on this device.</p>
@@ -187,6 +187,6 @@
     </section>
   </dialog>
   <div id="gardenToast" role="status" aria-live="polite"></div>
-  <script src="botanicals.js" defer></script><script src="visitors.js" defer></script><script src="sound.js" defer></script><script src="garden.js" defer></script>
+  <script src="botanicals.js" defer></script><script src="visitors.js" defer></script><script src="sound.js?v=20261023-ambient" defer></script><script src="garden.js" defer></script>
 </body>
 </html>

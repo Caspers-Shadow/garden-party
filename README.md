@@ -10,8 +10,8 @@ A quiet, illustrated botanical garden. Choose a specimen from the seed catalogue
 - Automatic saving in the current browser on the current device.
 - Move, resize, tilt, remove, and undo changes to your arrangement.
 - High resolution PNG export on cream botanical paper or in your garden's colours.
-- Three original calm background arrangements with play, pause, track selection, and volume.
-- Short placement notes for each flower, all in one harmonious scale; flower sounds can be switched off independently.
+- Three original, spacious ambient soundscapes with slow overlapping harmonies, breathy flute, air and water textures, plus play, pause, track selection, and volume.
+- Muted wooden taps and leaf rustles for each flower, with no electronic beeps or notification chimes; placement sounds can be switched off independently.
 - Optional gentle motion and keyboard controls.
 - Clear Plant and Move modes, generous flower targets, and a tabbed menu for flowers, settings, and saving.
 - Touch-friendly controls for phones and small screens.
